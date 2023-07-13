@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 
 
-const Header = ({ title }) => {
+const Header = ({ appName }) => {
   return (
     <>
-      <header>
-        <h1 className="text-center mt-5 fw-bold text-uppercase" key={title}>{title}</h1>
+      <header className="mt-5 pt-4 text-center">
+        <h1 className="text-capitalize fw-bolder">{appName}</h1>
       </header>
     </>
   );

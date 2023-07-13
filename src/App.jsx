@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import Content from './components/Content';
 import Header from './components/Header'
-import ShowTodos from './components/ShowTodos';
-import Footer from './components/Footer';
+import Content from './components/Content'
+import ShowTodos from './components/ShowTodos'
 
-const App = () => {
+function App() {
 
   const [todos, setTodos] = useState([])
 
@@ -15,13 +14,12 @@ const App = () => {
 
   return (
     <>
-      <Header title={"Basic Todo"} />
+      <Header appName={"basic react todo APP"} />
       <Content addTodo={addTodos} />
-      <ShowTodos todos={todos} />
-      <Footer />
-      {console.log(todos)}
-    </>
-  );
-};
 
-export default App;
+      <ShowTodos todos={todos} />
+    </>
+  )
+}
+
+export default App

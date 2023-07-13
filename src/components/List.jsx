@@ -1,12 +1,12 @@
-const List = (todo) => {
+/* eslint-disable react/prop-types */
+
+
+const List = ({todo}) => {
+  console.log(todo)
   return (
-    <>
-      <li className="mb-3 fs-4" id={todo.id}>
-        <span style={todo.done ? { color: "green", textDecoration: "line-through"} : {}}>
-          {todo.todo}
-        </span>
-      </li>
-    </>
+    <li className="pt-3">
+      {todo.todo}
+    </li>
   );
 };
 

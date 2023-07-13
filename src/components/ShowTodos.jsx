@@ -1,32 +1,29 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
 import List from "./List";
 
-const ShowTodos = ({ todos }) => {
 
-  // eslint-disable-next-line no-unused-vars
-  let [todo, setTodo] = useState([])
-
-  let todoList = todos
-
+const ShowTodos = ({todos}) => {
   return (
-    <section className="show-todos">
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12 mt-5">
-            <h4 className="text-center fw-bolder text-capitalize pb-5">your todos</h4>
+    <>
+      <section className="mt-5">
+        <div className="container">
+          <div className="content text-center">
 
-            <ol className="list">
+            <h4 className="text-capitalize">Your todos</h4>
+
+            <ol className="mt-5">
               {
-                todos.map((items, index) => {
-                  <List todo={items} key={index} />
-                  console.log(items)
+                todos.map(e => {
+                  <List todo={e} />
+                  console.log(e)
                 })
               }
             </ol>
+
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
