@@ -13,7 +13,7 @@ const Content = ({addTodo}) => {
     if(!todo) return
 
     let newTodo = {todo, id: Date.now(), done:false}
-
+    
     addTodo(newTodo)
     setTodo("")
   }

@@ -3,22 +3,24 @@ import List from "./List";
 
 
 const ShowTodos = ({todos}) => {
+
+  let list = todos  
+
   return (
     <>
-      <section className="mt-5">
+      <section className="show-todos mt-5">
         <div className="container">
           <div className="content text-center">
 
-            <h4 className="text-capitalize">Your todos</h4>
+            <h4 className="text-capitalize mb-5">Your todos</h4>
 
-            <ol className="mt-5">
+            <div className="row">
               {
-                todos.map(e => {
-                  <List todo={e} />
-                  console.log(e)
-                })
+                list.map((e, index) => (
+                  <List todo={e} key={index} />
+                ))
               }
-            </ol>
+            </div>
 
           </div>
         </div>
