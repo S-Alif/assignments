@@ -30,7 +30,6 @@ function App() {
   // get tasks from localStorage
   useEffect(() => {
     const tasks = JSON.parse(localStorage.getItem('tasks'))
-    console.log(tasks)
     if (tasks) {
       setTodos(tasks)
     }
