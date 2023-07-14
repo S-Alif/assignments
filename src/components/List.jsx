@@ -4,14 +4,14 @@ import { useState } from "react";
 
 const List = ({todo, deleteTask, toggleDone, toggleUndone}) => {
 
-  const [marked, setMarked] = useState(false)
+  const [marked, setMarked] = useState(todo.done)
 
   let marking = () => {
-    setMarked(true)
+    setMarked("true")
   } 
 
   let unMark = () => {
-    setMarked(false)
+    setMarked("false")
   }
 
 
@@ -63,12 +63,12 @@ const List = ({todo, deleteTask, toggleDone, toggleUndone}) => {
   
   return (
     <div className="col-lg-3 col-md-4 col-sm-2 mt-4">
-      <div className={marked ? "todo-content p-lg-3 p-2 rounded border border-2 border-success" : "todo-content p-lg-3 p-2 rounded"}>
+      <div className={marked=="true" ? "todo-content p-lg-3 p-2 rounded border border-2 border-success" : "todo-content p-lg-3 p-2 rounded"}>
         <p className="fw-medium text-start">{todo.todo}</p>
 
         <div className="check-btn text-end pt-3">
-          <button className={marked ? "d-none" : "btn btn-outline-success btn-sm rounded shadow me-1"} onClick={() => { toggleDone(todo.id); marking()}}>✔</button>
-          <button className={marked ? "btn btn-outline-warning btn-sm rounded shadow me-1" : "d-none"} onClick={() => { toggleUndone(todo.id); unMark() }}>✖</button>
+          <button className={marked == "true" ? "d-none" : "btn btn-outline-success btn-sm rounded shadow me-1"} onClick={() => { toggleDone(todo.id); marking()}}>✔</button>
+          <button className={marked == "true" ? "btn btn-outline-warning btn-sm rounded shadow me-1" : "d-none"} onClick={() => { toggleUndone(todo.id); unMark() }}>✖</button>
           <button className="btn btn-outline-danger btn-sm rounded shadow" data-bs-toggle="modal" data-bs-target={`#${todo.id}`}>🚮</button>
         </div>
 
