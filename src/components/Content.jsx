@@ -20,7 +20,7 @@ const Content = ({addTodo}) => {
 
   return (
     <>
-      <section className="mt-5 bg-body-tertiary">
+      <section className="form-container mt-5 bg-body-tertiary">
         <div className="container">
           <div className="content pt-5 pb-5 text-center">
 
