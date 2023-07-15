@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 
+import { BsCheckLg, BsXLg, BsTrashFill } from "react-icons/bs";
+
 
 const List = ({todo, deleteTask, toggleDone, toggleUndone}) => {
 
@@ -49,10 +51,7 @@ const List = ({todo, deleteTask, toggleDone, toggleUndone}) => {
                 data-bs-dismiss="modal"
                 onClick={() => deleteTask(id)}
               >
-                delete
-              </button>
-              <button type="button" className="btn btn-primary" data-bs-dismiss="modal">
-                close
+                DELETE
               </button>
             </div>
           </div>
@@ -62,14 +61,21 @@ const List = ({todo, deleteTask, toggleDone, toggleUndone}) => {
   }
   
   return (
-    <div className="col-lg-3 col-md-4 col-sm-2 mt-4">
+    <div className="col-lg-3 col-md-4 col-sm-6 mt-4">
       <div className={marked=="true" ? "todo-content p-lg-3 p-2 rounded border border-2 border-success" : "todo-content p-lg-3 p-2 rounded"}>
+        <figure>
+          <blockquote className="blockquote">
         <p className="fw-medium text-start">{todo.todo}</p>
+          </blockquote>
+          <figcaption className="blockquote-footer text-end pt-3">
+            Deadline : {todo.deadline}
+          </figcaption>
+        </figure>
 
         <div className="check-btn text-end pt-3">
-          <button className={marked == "true" ? "d-none" : "btn btn-outline-success btn-sm rounded shadow me-1"} onClick={() => { toggleDone(todo.id); marking()}}>✔</button>
-          <button className={marked == "true" ? "btn btn-outline-warning btn-sm rounded shadow me-1" : "d-none"} onClick={() => { toggleUndone(todo.id); unMark() }}>✖</button>
-          <button className="btn btn-outline-danger btn-sm rounded shadow" data-bs-toggle="modal" data-bs-target={`#${todo.id}`}>🚮</button>
+          <button className={marked == "true" ? "d-none" : "btn btn-outline-success btn-sm rounded shadow me-1"} onClick={() => { toggleDone(todo.id); marking()}}><BsCheckLg /></button>
+          <button className={marked == "true" ? "btn btn-outline-primary btn-sm rounded shadow me-1" : "d-none"} onClick={() => { toggleUndone(todo.id); unMark() }}><BsXLg /></button>
+          <button className="btn btn-outline-danger btn-sm rounded shadow" data-bs-toggle="modal" data-bs-target={`#${todo.id}`}><BsTrashFill /></button>
         </div>
 
         {
