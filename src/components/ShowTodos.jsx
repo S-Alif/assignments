@@ -36,14 +36,11 @@ const ShowTodos = ({ todos, deleteTask, clearList, toggleDone, toggleUndone }) =
             <div className="modal-footer">
               <button
                 type="button"
-                className="btn btn-danger"
+                className="btn btn-danger text-uppercase"
                 data-bs-dismiss="modal"
                 onClick={() => clearList()}
               >
                 delete
-              </button>
-              <button type="button" className="btn btn-primary" data-bs-dismiss="modal">
-                close
               </button>
             </div>
           </div>
@@ -55,7 +52,7 @@ const ShowTodos = ({ todos, deleteTask, clearList, toggleDone, toggleUndone }) =
   const clear_btn = (listSize) => {
     if(listSize > 0){
       return (
-        <div className="clear-list text-center mt-4 mb-5">
+        <div className="clear-list text-center mt-5 pt-3 mb-5">
           <button className="btn btn-danger text-capitalize" data-bs-toggle="modal" data-bs-target="#listClear">clear tasks</button>
           {confirm_delete()}
         </div>
@@ -74,7 +71,9 @@ const ShowTodos = ({ todos, deleteTask, clearList, toggleDone, toggleUndone }) =
   const placeHolder = (listSize) => {
     if(listSize == 0){
       return (
-        <h4 className="text-center mb-5 pt-5 text-secondary"> Your tasks will be shown here</h4>
+        <blockquote className="blockquote">
+          <p>Your tasks will be shown here</p>
+        </blockquote>
       )
     }
   }
