@@ -23,7 +23,7 @@ export const taskSlicer = createSlice({
       if (task.task){
         state.todo.find(todo => todo.id == id).task = task.task
       }
-      if (task.done){
+      if (task.done == true || task.done == false){
         state.todo.find(todo => todo.id == id).done = task.done
       }
       localStorage.setItem("task", JSON.stringify(state.todo))
