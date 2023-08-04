@@ -1,3 +1,0 @@
-live site : 
--------------
-https://basic-react-task-app.netlify.app/

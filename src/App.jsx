@@ -1,77 +1,57 @@
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux"
+import { add } from './features/slices/taskSlice';
+import List from "./List";
 
-import Header from './components/Header'
-import Content from './components/Content'
-import ShowTodos from './components/ShowTodos'
-import Footer from './components/Footer';
+const App = () => {
 
-function App() {
+  const [input, setInput] = useState("")
+  const dispatch = useDispatch()
+  let value = useSelector((state) => state.manager.todo)
 
-  const [todos, setTodos] = useState(() => {
-    if (localStorage.getItem("tasks")){
-      return JSON.parse(localStorage.getItem('tasks'))
+  let createTask = (e) => {
+    e.preventDefault()
+
+    let task = {
+      task: input,
+      id: Date.now(),
+      done: false
     }
-    else{
-      return []
-    }
-  })
-
-  // adding the tasks
-  let addTodos = (todo) => {
-    setTodos((todos) => [...todos, todo])
+    dispatch(add(task))
+    setInput("")
   }
 
-  // save tasks on localStorage
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(todos))
-  })
-
-  // get tasks from localStorage
-  useEffect(() => {
-    const tasks = JSON.parse(localStorage.getItem('tasks'))
-    if (tasks) {
-      setTodos(tasks)
-    }
-  }, []);
-
-  // delete tasks
-  let delete_a_task = (taskId) => {
-    setTodos((todos) => todos.filter((todo) => todo.id != taskId))
-  }
-  let clear_list = () => {
-
-    setTodos([])
-  }
-
-  // mark the work done
-  let mark_done = (taskId) => {
-    setTodos((todos) =>
-      todos.map((tasks) =>
-        tasks.id == taskId ? {...tasks, done: 'true'} : tasks
-      )
-    )
-  }
-
-  // marking undone
-  let mark_unDone = (taskId) => {
-    setTodos((todos) =>
-      todos.map((tasks) =>
-        tasks.id == taskId ? { ...tasks, done: 'false' } : tasks
-      )
-    )
-  }
 
   return (
     <>
-      <Header appName={"basic react todo APP"} />
-      <Content addTodo={addTodos} />
+      <section className="main-section">
+        <div className="container">
+          <h1 className="text-uppercase pt-5 pb-5 fs-3 fw-bolder text-center">redux todo app</h1>
 
-      <ShowTodos todos={todos} deleteTask={delete_a_task} clearList={clear_list} toggleDone={mark_done} toggleUndone={mark_unDone} />
+          <div className="data-input shadow rounded-2 mt-4 p-4">
+            <form action="" className="row" onSubmit={createTask}>
+              <div className="col-12 col-md-9 pt-3">
+                <input type="text" className="form-control" placeholder="todo...." required value={input} onChange={(e) => setInput(e.target.value)} />
+              </div>
+              <div className="col-12 col-md-3 pt-3">
+                <button type="submit" className="btn btn-success d-inline-block pe-4 ps-4 fw-bold">Save</button>
+              </div>
+            </form>
+          </div>
 
-      <Footer />
+          <div className="show-data mt-5 p-4 rounded-2 shadow">
+            <div className="row">
+              {
+                value.map((e, index) => (
+                  <List task={e} key={index} />
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </section>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
