@@ -12,4 +12,4 @@ const productSchema = mongoose.Schema({
 }, { timestamps: true, versionKey: false })
 
 
-module.exports = mongoose.model("Product", productSchema)
+module.exports = mongoose.model("product", productSchema)
