@@ -6,8 +6,8 @@
 ## Other instruction
 1. Port is `8080` by default
 2. use a **`.env`** file and add the following fileds
-    - db : your mongodb database connection link with database name
-    - port: your desired port
+    - **db** : your mongodb database connection link with database name
+    - **port** : your desired port
 3. use **`/product`** for the routes [ e.g : **/product/get-cart** ]
 
 ## Endpoints
