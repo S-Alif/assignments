@@ -9,7 +9,7 @@ const auth = require('../middlewares/auth')
 router.post('/register', userController.registration)
 router.get('/login', userController.login)
 
-router.post('/delete/:id', userController.login)
+router.post('/delete/:id', userController.deleteId)
 
 router.post("/create-product", taskController.createProduct)
 

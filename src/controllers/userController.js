@@ -59,7 +59,7 @@ exports.login = async (req, res) => {
 }
 
 // delete id
-exports.login = async (req, res) => {
+exports.deleteId = async (req, res) => {
   try {
     let id = req.params.id
     let user_delete = await userModel.deleteOne({_id: id})
