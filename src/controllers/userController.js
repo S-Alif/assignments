@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken')
 
 // models
 const userModel = require('../models/userModel')
+const cartModel = require('../models/cartItemModel')
+const orderModel = require('../models/orderModel')
 
 // registration
 exports.registration = async (req, res) => {
@@ -47,6 +49,27 @@ exports.login = async (req, res) => {
         data: user_login
       })
     }
+  }
+  catch (error) {
+    res.status(200).json({
+      status: 0,
+      data: error
+    })
+  }
+}
+
+// delete id
+exports.login = async (req, res) => {
+  try {
+    let id = req.params.id
+    let user_delete = await userModel.deleteOne({_id: id})
+    let user_cart_delete = await cartModel.deleteMany({user: id})
+    let user_orders_delete = await orderModel.deleteOne({ user: id })
+    
+    res.status(200).json({
+      status: 1,
+      data: [user_delete, user_cart_delete, user_orders_delete]
+    })
   }
   catch (error) {
     res.status(200).json({
