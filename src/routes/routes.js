@@ -14,5 +14,8 @@ router.post("/create-product", taskController.createProduct)
 router.post("/create-cart", auth, taskController.enterItemToCart)
 router.get("/get-cart/:id", auth, taskController.retrieveCart)
 
+router.post("/post-order", auth, taskController.postOrder)
+router.get("/get-order/:id", auth, taskController.getOrder)
+
 
 module.exports = router
