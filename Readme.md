@@ -8,7 +8,7 @@
 2. use a **`.env`** file and add the following fileds
     - **db** : your mongodb database connection link with database name
     - **port** : your desired port
-3. use **`/api/sale`** for the routes [ e.g : **/api/sale/total-revenue** ]
+3. use **`/api/sales`** for the routes [ e.g : **/api/sale/total-revenue** ]
 
 
 ## Table of contents
