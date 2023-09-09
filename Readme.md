@@ -19,8 +19,10 @@
 - [Sample data show](#sample-data-show)
 
 
+
 ## Highlighted Endpoint
 1. **`/enter-sales`** : for entering demo sales data
+
 
 ## Product model
 
@@ -45,8 +47,10 @@ I used extra two fields `dept` and `soldAt`, to calculate department salary expe
 > `soldAt` is used as selling price for per unit product
 
 
+
 ## Postman online documentation
  - [documnetation](https://documenter.getpostman.com/view/27171367/2s9YC1Wa2m)
+
 
 
 ## Demo sale body
@@ -64,6 +68,8 @@ I used extra two fields `dept` and `soldAt`, to calculate department salary expe
 
 Copy and paste into postman to enter sales data.
 > Demo sale data can be found [here](https://github.com/S-Alif/assignments/blob/main/product-management.sales.json). Import this in mongodb compass
+
+
 
 ### Sample data show
 <hr>
