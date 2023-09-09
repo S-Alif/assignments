@@ -10,6 +10,15 @@
     - **port** : your desired port
 3. use **`/api/sale`** for the routes [ e.g : **/api/sale/total-revenue** ]
 
+
+## Table of contents
+- [Highlighted Endpoint](#highlighted-endpoint)
+- [Product model](#product-model)
+- [Postman online documentation](#postman-online-documentation)
+- [Demo sale body](#demo-sale-body)
+- [Sample data show](#sample-data-show)
+
+
 ## Highlighted Endpoint
 1. **`/enter-sales`** : for entering demo sales data
 
@@ -55,7 +64,8 @@ I used extra two fields `dept` and `soldAt`, to calculate department salary expe
 
 Copy and paste into postman to enter sales data
 
-### Sample data show <br><hr>
+### Sample data show
+<hr>
 
 1. **total revenue** : 
 
