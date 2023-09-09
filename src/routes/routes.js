@@ -1,23 +1,17 @@
 const express = require('express')
 const router = express.Router()
 
-const userController = require('../controllers/userController')
 const taskController = require('../controllers/taskController')
 
-const auth = require('../middlewares/auth')
+router.get('/total-revenue', taskController.totalRevenue)
+router.get('/quantity-by-product', taskController.quantityByProduct)
+router.get('/top-products', taskController.topProducts)
+router.get('/average-price', taskController.avgPrice) 
+router.get('/revenue-by-month', taskController.revenueByMonth)
+router.get('/highest-quantity-sold', taskController.highestQuantitySold)
+router.get('/department-salary-expense', taskController.departmentSalaryExpense)
 
-router.post('/register', userController.registration)
-router.get('/login', userController.login)
 
-router.post('/delete/:id', userController.deleteId)
-
-router.post("/create-product", taskController.createProduct)
-
-router.post("/create-cart", auth, taskController.enterItemToCart)
-router.get("/get-cart/:id", auth, taskController.retrieveCart)
-
-router.post("/post-order", auth, taskController.postOrder)
-router.get("/get-order/:id", auth, taskController.getOrder)
-
+router.post('/enter-sales', taskController.createSales)
 
 module.exports = router

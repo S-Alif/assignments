@@ -1,15 +1,14 @@
-const productModel = require('../models/prodcutModel')
-const cartModel = require('../models/cartItemModel')
-const orderModel = require('../models/orderModel')
+const salesModel = require("../models/salesModel")
+
 
 // create a product
-exports.createProduct = async (req, res) => {
+exports.createSales = async (req, res) => {
   try {
-    let product = await productModel.create(req.body)
+    let saleProduct = await salesModel.create(req.body)
 
     res.status(200).json({
       status: 1,
-      data: product
+      data: saleProduct
     })
 
   } catch (error) {
@@ -20,16 +19,19 @@ exports.createProduct = async (req, res) => {
   }
 }
 
-// carts
-exports.enterItemToCart = async (req, res) => {
+// total revenue
+exports.totalRevenue = async (req, res) => {
   try {
-    let cart = await cartModel.create(req.body)
+    let groupStage = { $group: { _id: null, totalSales: { $sum: "$quantity" }, totalPrice: { $sum: { $multiply: ["$quantity", "$price"] } }, totalSoldAt: { $sum: { $multiply: ["$quantity", "$soldAt"] } } }}
+    let projetcStage = { $project: { _id: 0, totalSales: 1, total_Buying_Price: "$totalPrice", total_selling_price: "$totalSoldAt", totalRevenue: { $subtract: ["$totalSoldAt", "$totalPrice"]}}}
+
+    let totalRevenue = await salesModel.aggregate([groupStage, projetcStage])
 
     res.status(200).json({
       status: 1,
-      data: cart
+      data: totalRevenue
     })
-
+    
   } catch (error) {
     res.status(200).json({
       status: 0,
@@ -38,54 +40,111 @@ exports.enterItemToCart = async (req, res) => {
   }
 }
 
-// retrieve carts
-exports.retrieveCart = async (req, res) => {
+// quantity by product
+exports.quantityByProduct = async (req, res) => {
   try {
-    let id = req.params.id
-    let cart = await cartModel.aggregate([
-      { $match: { $expr: { $eq: ['$user', { $toObjectId: id }] } } },
+    let groupStage = { $group: { _id: "$product", totalSale: { $sum: "$quantity" } } }
+    let projetcStage = { $project: { _id: 0, product: "$_id", totalSale: 1} }
+    let quantityByProduct = await salesModel.aggregate([groupStage, projetcStage])
+
+    res.status(200).json({
+      status: 1,
+      data: quantityByProduct
+    })
+    
+  } catch (error) {
+    res.status(200).json({
+      status: 0,
+      data: error
+    })
+  }
+}
+
+// top products
+exports.topProducts = async (req, res) => {
+  try {
+    let groupStage = { $group: { _id: "$product", totalSales: { $sum: "$quantity" }, totalPrice: { $sum: { $multiply: ["$quantity", "$price"] } }, totalSoldAt: { $sum: { $multiply: ["$quantity", "$soldAt"] } } }}
+    let projetcStage = { $project: { product: "$_id", _id: 0, totalSales: 1, totalRevenue: { $subtract: ["$totalSoldAt", "$totalPrice"] } }}
+    let sortStage = {$sort: { totalRevenue: -1 }}
+    let limitStage = {$limit: 5}
+
+    let topProducts = await salesModel.aggregate([groupStage, projetcStage, sortStage, limitStage])
+
+    res.status(200).json({
+      status: 1,
+      data: topProducts
+    })
+    
+  } catch (error) {
+    res.status(200).json({
+      status: 0,
+      data: error
+    })
+  }
+}
+
+// average price
+exports.avgPrice = async (req, res) => {
+  try {
+
+    let avgPrice = await salesModel.aggregate([
       {
-        $lookup: {
-          from: "users", localField: "user", foreignField:"_id", pipeline: [{
-            $project: {
-              firstName: 1,
-              lastName: 1,
-              _id: 0
-            }
-          }],
-          as: "userData"
+        $group:{
+          _id: null,
+          totalSales: { $sum: "$quantity" },
+          totalPrice: { $sum: { $multiply: ["$quantity", "$price"] } },
+          totalSoldAt: { $sum: { $multiply: ["$quantity", "$soldAt"] } }
         }
       },
       {
-        $lookup: {
-          from: "products", localField: "product", foreignField: "_id", pipeline: [{
-            $project: {
-              name: 1,
-              imageURL: 1,
-              price: 1,
-              _id: 0
-            }
-          }],
-          as: "productData"
-        }
-      },
-      
-      {
-        $project:{
+        $project: {
           _id: 0,
-          createdAt: 0,
-          updatedAt: 0,
+          totalSales: 1,
+          totalRevenue: { $subtract: ["$totalSoldAt", "$totalPrice"] }
+        } 
+      },
+      {
+        $project: {
+          _id: 0,
+          totalSales: 1,
+          totalRevenue: 1,
+          total_avg_price_per_unit_product_sold: { $round: [{ $divide: ["$totalRevenue", "$totalSales"] }, 2] }
+        }
+      }
+    ])
+    let avgPrice_per_product = await salesModel.aggregate([
+      {
+        $group:{
+          _id: "$product",
+          totalSales: { $sum: "$quantity" },
+          totalPrice: { $sum: { $multiply: ["$quantity", "$price"] } },
+          totalSoldAt: { $sum: { $multiply: ["$quantity", "$soldAt"] } }
         }
       },
-      { $unwind: "$userData" },
-      { $unwind: "$productData" },
+      {
+        $project: {
+          _id: 1,
+          product: "$_id",
+          totalSales: 1,
+          totalRevenue: { $subtract: ["$totalSoldAt", "$totalPrice"] }
+        } 
+      },
+      {
+        $project: {
+          _id: 0,
+          product: "$_id",
+          totalSales: 1,
+          totalRevenue: 1,
+          avg_price_per_this_unit_product_sold: { $round: [{ $divide: ["$totalRevenue", "$totalSales"] }, 2] }
+        }
+      }
     ])
 
     res.status(200).json({
       status: 1,
-      data: cart
+      data: {avgPrice: avgPrice[0], avgPrice_per_product}
     })
-
+    
   } catch (error) {
     res.status(200).json({
       status: 0,
@@ -94,14 +153,84 @@ exports.retrieveCart = async (req, res) => {
   }
 }
 
-// order
-exports.postOrder = async (req, res) => {
+// revenue by month
+exports.revenueByMonth = async (req, res) => {
   try {
-    let order = await orderModel.create(req.body)
+    let groupStage = {
+      $group: {
+        _id: {
+          year: { $year: "$date" },
+          month: { $month: "$date" }
+        },
+        totalPrice: { $sum: { $multiply: ["$quantity", "$price"] } },
+        totalSoldAt: { $sum: { $multiply: ["$quantity", "$soldAt"] } }
+      }
+    }
+
+    let projetcStage = {
+      $project: {
+        _id: 0,
+        month: "$_id.month",
+        year: "$_id.year",
+        totalRevenue: { $subtract: ["$totalSoldAt", "$totalPrice"] }
+      }
+    }
+    
+    let sortStage = {
+      $sort: {
+        year: -1
+      }
+    }
+
+    let revenueByMonth = await salesModel.aggregate([groupStage, projetcStage, sortStage])
+    
+    res.status(200).json({
+      status: 1,
+      data: revenueByMonth
+    })
+  } catch (error) {
+    res.status(200).json({
+      status: 0,
+      data: error
+    })
+  }
+}
+
+// highest quantity sold
+exports.highestQuantitySold = async (req, res) => {
+  try {
+    let groupStage = {
+      $group: {
+        _id: {
+          product: "$product",
+          day: { $dateToString: { format: "%Y-%m-%d", date: "$date" } }
+        },
+        totalQuantity: { $sum: "$quantity" }
+      }
+    }
+
+    let sortStage = {
+      $sort: { totalQuantity: -1 }
+    }
+
+    let limitStage = {
+      $limit: 1
+    }
+
+    let projetcStage = {
+      $project: {
+        _id: 0,
+        product: "$_id.product",
+        totalQuantity: 1,
+        date: "$_id.day"
+      }
+    }
+
+    let highestQuantitySold = await salesModel.aggregate([groupStage, sortStage, limitStage, projetcStage])
 
     res.status(200).json({
       status: 1,
-      data: order
+      data: highestQuantitySold
     })
 
   } catch (error) {
@@ -112,72 +241,35 @@ exports.postOrder = async (req, res) => {
   }
 }
 
-// get order
-exports.getOrder = async (req, res) => {
+// department salary expense
+exports.departmentSalaryExpense = async (req, res) => {
   try {
-    let id = req.params.id
-    let order = await orderModel.aggregate([
-      { $match: { $expr: { $eq: ['$user', { $toObjectId: id }] } } },
+    let departmentSalaryExpense = await salesModel.aggregate([
       {
-        $lookup: {
-          from: "users", localField: "user", foreignField: "_id", pipeline: [{
-            $project: {
-              firstName: 1,
-              lastName: 1,
-              _id: 0
-            }
-          }],
-          as: "userData"
-        }
-      },
-      {
-        $lookup: {
-          from: "cartitems", localField: "user", foreignField: "user", pipeline: [
-            {
-              $lookup: {
-                from: 'products',
-                localField: 'product',
-                foreignField: '_id',pipeline: [
-                  {
-                    $project: {
-                      name: 1,
-                      price: 1,
-                      imageURL: 1,
-                      _id: 0
-                    }
-                  }
-                ],
-                as: 'productDetails'
-              }
-            },
-            {
-            $project: {
-              quantity:1,
-              productDetails: 1,
-              _id: 0
-            }
-          }
-        ],
-          as: "productData"
+        $group:{
+          _id: "$dept",
+          dept_total_product_sale: { $sum: "$quantity"},
+          total_salary_exp: {$sum: {$multiply: ["$quantity", "$price"]}},
+          dept_total_sale_amount: { $sum: { $multiply: ["$quantity", "$soldAt"] } }
         }
       },
       {
         $project:{
           _id: 0,
-          user: 0,
-          items: 0,
-          createdAt: 0,
-          updatedAt: 0
+          department: "$_id",
+          dept_total_product_sale: 1,
+          total_salary_exp: 1,
+          dept_total_sale_amount: 1,
+          dept_total_revenue: { $subtract: ["$dept_total_sale_amount", "$total_salary_exp"]}
         }
-      },
-      {$unwind: "$userData"}
+      }
     ])
 
     res.status(200).json({
       status: 1,
-      data: order
+      data: departmentSalaryExpense
     })
-
+    
   } catch (error) {
     res.status(200).json({
       status: 0,

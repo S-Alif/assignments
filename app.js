@@ -20,7 +20,7 @@ app.use(express.json({ limit: '5mb' }))
 app.use(express.urlencoded({ limit: '5mb' }))
 
 // route
-app.use('/product', router)
+app.use('/api/sales', router)
 
 // dotenv
 dotenv.config()
