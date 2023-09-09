@@ -62,7 +62,8 @@ I used extra two fields `dept` and `soldAt`, to calculate department salary expe
 }
 ```
 
-Copy and paste into postman to enter sales data
+Copy and paste into postman to enter sales data.
+> Demo sale data can be found [here](https://github.com/S-Alif/assignments/blob/main/product-management.sales.json). Import this in mongodb compass
 
 ### Sample data show
 <hr>
